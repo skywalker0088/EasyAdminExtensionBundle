@@ -59,7 +59,6 @@ class ShortFormTypeConfigPass implements ConfigPassInterface
         $shortFormTypes = $this->getShortFormTypes();
 
         foreach (static::$configWithFormPaths as $configWithFormPath) {
-
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
             $configPathItem = $propertyAccessor->getValue($objectConfig, $configWithFormPath);
 

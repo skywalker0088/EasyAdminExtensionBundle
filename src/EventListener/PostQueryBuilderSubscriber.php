@@ -5,13 +5,11 @@ namespace AlterPHP\EasyAdminExtensionBundle\EventListener;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Apply filters on list/search queryBuilder.
  */
-class PostQueryBuilderSubscriber implements EventSubscriberInterface
+class PostQueryBuilderSubscriber extends AbstractPostQueryBuilderSubscriber
 {
     /**
      * {@inheritdoc}
@@ -22,35 +20,6 @@ class PostQueryBuilderSubscriber implements EventSubscriberInterface
             EasyAdminEvents::POST_LIST_QUERY_BUILDER => array('onPostListQueryBuilder'),
             EasyAdminEvents::POST_SEARCH_QUERY_BUILDER => array('onPostSearchQueryBuilder'),
         );
-    }
-
-    /**
-     * Called on POST_LIST_QUERY_BUILDER event.
-     *
-     * @param GenericEvent $event
-     */
-    public function onPostListQueryBuilder(GenericEvent $event)
-    {
-        $queryBuilder = $event->getArgument('query_builder');
-
-        if ($event->hasArgument('request')) {
-            $this->applyRequestFilters($queryBuilder, $event->getArgument('request')->get('filters', array()));
-            $this->applyFormFilters($queryBuilder, $event->getArgument('request')->get('form_filters', array()));
-        }
-    }
-
-    /**
-     * Called on POST_SEARCH_QUERY_BUILDER event.
-     *
-     * @param GenericEvent $event
-     */
-    public function onPostSearchQueryBuilder(GenericEvent $event)
-    {
-        $queryBuilder = $event->getArgument('query_builder');
-
-        if ($event->hasArgument('request')) {
-            $this->applyRequestFilters($queryBuilder, $event->getArgument('request')->get('filters', array()));
-        }
     }
 
     /**

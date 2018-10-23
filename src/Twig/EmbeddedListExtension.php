@@ -3,6 +3,7 @@
 namespace AlterPHP\EasyAdminExtensionBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class EmbeddedListExtension extends AbstractExtension
@@ -22,6 +23,13 @@ class EmbeddedListExtension extends AbstractExtension
         $this->embeddedListHelper = $embeddedListHelper;
     }
 
+    public function getFilters()
+    {
+        return array(
+            new TwigFilter('embedded_list_identifier', array($this, 'getEmbeddedListIdentifier')),
+        );
+    }
+
     public function getFunctions()
     {
         return array(
@@ -29,8 +37,13 @@ class EmbeddedListExtension extends AbstractExtension
         );
     }
 
-    public function guessDefaultFilters(string $entityFqcn, string $parentEntityProperty, $parentEntity)
+    public function getEmbeddedListIdentifier(string $requestUri)
     {
-        return $this->embeddedListHelper->guessDefaultFilter($entityFqcn, $parentEntityProperty, $parentEntity);
+        return md5($requestUri);
+    }
+
+    public function guessDefaultFilters(string $objectFqcn, string $parentDocumentProperty, $parentDocument)
+    {
+        return $this->embeddedListHelper->guessDefaultFilter($objectFqcn, $parentDocumentProperty, $parentDocument);
     }
 }
